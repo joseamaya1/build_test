@@ -1,12 +1,10 @@
-os: Visual Studio 2015
+image: Visual Studio 2017
 
-branches:
-  only:
-    - master
+shallow_clone: true
 
 platform:
-  - Win32
   - x64
+  - Win32
 
 configuration:
   - Release
@@ -14,12 +12,22 @@ configuration:
 matrix:
   fast_finish: true
 
+only_commits:
+  files:
+    - src/
+    - vc14/
+    - cmake/
+    - appveyor.yml
+
 environment:
-  BOOST_ROOT: C:\Libraries\boost_1_62_0
+  BOOST_ROOT: C:\Libraries\boost_1_66_0
 
 install:
   - ps: if (-not (Test-Path tfs-sdk-3.2)) { Start-FileDownload https://static.otland.net/dl/tfs-sdk-3.2.zip; 7z x tfs-sdk-3.2.zip }
   - set TFSSDKDir=%CD%\tfs-sdk-3.2
+
+build:
+  parallel: true
 
 cache:
   - tfs-sdk-3.2 -> appveyor.yml
